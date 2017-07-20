@@ -1,0 +1,36 @@
+#!/bin/bash
+set -e
+
+BIN_DIR=$(cd $(dirname "${0}"); pwd)
+BUILD_DIR="${1}"
+
+AWS_S3_BUCKET="${AWS_S3_BUCKET:-"kc-heroku-buildpack-binaries"}"
+
+FFMPEG_VERSION="${FFMPEG_VERSION:-3.3.2}"
+FFMPEG_URL="https://${AWS_S3_BUCKET}.s3.amazonaws.com/${STACK:-"cedar-14"}/ffmpeg/${FFMPEG_VERSION}.tar.xz"
+
+FFMPEG_DIR="${BUILD_DIR}/.ffmpeg"
+FFMPEG_TARBALL="${FFMPEG_DIR}/ffmpeg.tar.xz"
+FFMPEG_EXE="${FFMPEG_DIR}/bin/ffmpeg"
+
+. ${BIN_DIR}/util
+
+if [ ! -d "${BUILD_DIR}" ]; then
+  error_return "Invalid directory to install FFmpeg."
+  exit 1
+fi
+
+if [ ! -f "${FFMPEG_TARBALL}" ] && [ ! -f "${FFMPEG_EXE}" ] || \
+     is_version_change "${FFMPEG_DIR}" "${FFMPEG_VERSION}" "FFmpeg"; then
+  rm -rf "${FFMPEG_DIR}"
+  mkdir -p "${FFMPEG_DIR}"
+  curl --retry 3 --silent --show-error --location "${FFMPEG_URL}" \
+    --output "${FFMPEG_TARBALL}"
+  tar -xpJf "${FFMPEG_TARBALL}" -C "${FFMPEG_DIR}"
+  rm "${FFMPEG_TARBALL}"
+  echo "${FFMPEG_VERSION}" > "${FFMPEG_DIR}/version"
+  if [ ! -f "${FFMPEG_EXE}" ]; then
+    error_return "Unable to retrieve FFmpeg."
+    exit 1
+  fi
+fi

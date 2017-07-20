@@ -1,0 +1,4 @@
+#!/bin/sh
+
+echo "FFmpeg"
+exit 0

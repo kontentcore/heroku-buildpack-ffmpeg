@@ -1,0 +1,67 @@
+#!/bin/bash
+
+is_version_change() {
+  local dir="${1}"
+  local version="${2}"
+  local name="${3}"
+
+  if [ ! -d "${dir}" ]; then
+    echo "Invalid ${name} directory."
+    return 1
+  fi
+
+  [ -f "${dir}/version" ] && [ "$(cat "${dir}/version")" != "${version}" ]
+}
+
+validate_version() {
+  local url="${1}"
+  local version="${2}"
+  local name="${3}"
+
+  local status=$(curl --retry 3 --silent --head -w %{http_code} -L ${url} \
+    -o /dev/null)
+  if [ "${status}" != "200" ]; then
+    echo ""
+    error_return "Unsupported ${name} version: ${version}
+
+Run this buildpack as an application on the same Heroku stack and
+with the same config vars to create environment to build ${name}
+binaries. When deployed, run bundle exec make in one-off dyno."
+    return 1
+  fi
+}
+
+error_return() {
+  echo
+  echo " !     ERROR: $*" | indent no_first_line_indent
+  echo
+  return 1
+}
+
+status() {
+  echo "-----> $*"
+}
+
+status_pending() {
+  echo -n "-----> $*..."
+}
+
+status_done() {
+  echo " done"
+}
+
+# sed -l basically makes sed replace and buffer through stdin to
+# stdout so you get updates while the command runs and dont wait for
+# the end e.g. npm install | indent
+indent() {
+  # if an arg is given it's a flag indicating we shouldn't indent the
+  # first line, so use :+ to tell SED accordingly if that parameter
+  # is set, otherwise null string for no range selector prefix (it
+  # selects from line 2 onwards and then every 1st line, meaning all
+  # lines)
+  c="${1:+"2,999"} s/^/       /"
+  case $(uname) in
+    Darwin) sed -l "$c";; # mac/bsd
+    *)      sed -u "$c";; # unix/gnu
+  esac
+}
