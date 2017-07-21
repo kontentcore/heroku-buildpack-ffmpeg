@@ -8,12 +8,12 @@ module FFmpeg
   DOWNLOADS_BASE_URL = 'http://ffmpeg.org/releases'
   VERSION = ENV['FFMPEG_VERSION']
   TARBALL_EXT = '.tar.xz'
-  DOWNLOADS_DIR = 'downloads'
   PREFIX = ENV['FFMPEG_DIR']
 
   BASE_NAME = "ffmpeg-#{VERSION}"
-  SRC_DIR = BASE_NAME
-  BUILD_DIR = "#{BASE_NAME}.build"
+  SRC_TARBALL = "#{FFMPEG_BUILD_DIR}/#{BASE_NAME}#{TARBALL_EXT}"
+  SRC_DIR = "#{FFMPEG_BUILD_DIR}/#{BASE_NAME}"
+  BUILD_DIR = "#{FFMPEG_BUILD_DIR}/#{ENV['STACK']}/#{BASE_NAME}"
 
   directory PREFIX
   file PREFIX => ["#{BUILD_DIR}/Makefile"] do |t|
@@ -35,29 +35,24 @@ module FFmpeg
   directory BUILD_DIR
   CLEAN << BUILD_DIR
 
-  file "#{SRC_DIR}/configure" => [
-      "#{DOWNLOADS_DIR}/#{BASE_NAME}#{TARBALL_EXT}.asc",
-      "#{DOWNLOADS_DIR}/#{BASE_NAME}#{TARBALL_EXT}"
-  ] do |t|
+  file "#{SRC_DIR}/configure" => ["#{SRC_TARBALL}.asc", SRC_TARBALL] do |t|
     sh 'gpg', '--verify', *t.prerequisites
-    sh 'tar', '-xJf', t.prerequisites.last
+    sh 'tar', '-xJf', t.prerequisites.last,
+       '-C', File.dirname(File.dirname(t.name))
   end
   CLOBBER << SRC_DIR
 
-  file "#{DOWNLOADS_DIR}/#{BASE_NAME}#{TARBALL_EXT}" => [DOWNLOADS_DIR] do |t|
+  file SRC_TARBALL do |t|
     uri = URI "#{DOWNLOADS_BASE_URL}/#{File.basename t.name}"
     rake_output_message "Download #{uri} to #{t.name}"
     File.write t.name, Net::HTTP.get(uri)
   end
-  CLOBBER << "#{DOWNLOADS_DIR}/#{BASE_NAME}#{TARBALL_EXT}"
+  CLOBBER << SRC_TARBALL
 
-  file "#{DOWNLOADS_DIR}/#{BASE_NAME}#{TARBALL_EXT}.asc" => [DOWNLOADS_DIR] do |t|
+  file "#{SRC_TARBALL}.asc" do |t|
     uri = URI "#{DOWNLOADS_BASE_URL}/#{File.basename t.name}"
     rake_output_message "Download #{uri} to #{t.name}"
     File.write t.name, Net::HTTP.get(uri)
   end
-  CLOBBER << "#{DOWNLOADS_DIR}/#{BASE_NAME}#{TARBALL_EXT}.asc"
-
-  directory DOWNLOADS_DIR
-  CLOBBER << DOWNLOADS_DIR
+  CLOBBER << "#{SRC_TARBALL}.asc"
 end
