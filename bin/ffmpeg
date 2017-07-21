@@ -61,8 +61,9 @@ validate_url() {
     echo ""
     error_return "Unsupported FFmpeg version: ${version}
 
-Build this buildpack as a Docker image. Then, try to run it to build
-and upload FFmpeg binaries for Heroku during slub compile stage."
+Build this buildpack as a Docker image. Then, try to run it
+to build and upload FFmpeg binaries for Heroku during slub
+compile stage."
     return 1
   fi
 }
