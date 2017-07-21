@@ -1,0 +1,77 @@
+#!/usr/bin/bash
+
+install_ffmpeg() {
+  local buildDir="${1}"
+  local version="#{2}"
+  local url="#{3}"
+
+  status_pending "Installing FFmpeg ${version}"
+
+  if [ ! -d "${buildDir}" ]; then
+    error_return "Invalid directory to install FFmpeg."
+    return 1
+  fi
+
+  local baseDir="${buildDir}/.ffmpeg"
+  local tarball="${baseDir}/ffmpeg.tar.xz"
+  local exe="${basedir}/bin/ffmpeg"
+  mkdir -p "${baseDir}"
+
+  if [ ! -f "${tarball}" ] && [ ! -f "${exe}" ] || \
+      is_version_change "${baseDir}" "${version}" "FFmpeg"; then
+    rm -rf "${baseDir}"
+    mkdir -p "${baseDir}"
+    validate_url "${url}" "${version}"
+    curl --retry 3 --silent --show-error --location "${url}" \
+      --output "${tarball}"
+    tar -xpJf "${tarball}" -C "${baseDir}"
+    rm "${tarball}"
+    echo "${version}" > "${baseDir}/version"
+    if [ ! -f "${exe}" ]; then
+      error_return "Unable to retrieve FFmpeg."
+      exit 1
+    fi
+  fi
+  export PATH="${baseDir}/bin:${PATH}"
+
+  create_export_script "${buildDir}"
+
+  status_done
+}
+
+is_version_change() {
+  local dir="${1}"
+  local version="${2}"
+
+  if [ ! -d "${dir}" ]; then
+    echo "Invalid FFmpeg directory."
+    return 1
+  fi
+
+  [ -f "${dir}/version" ] && [ "$(cat "${dir}/version")" != "${version}" ]
+}
+
+validate_url() {
+  local url="${1}"
+  local version="${2}"
+
+  local status=$(curl --retry 3 --silent --head -w %{http_code} -L "${url}" \
+    -o /dev/null)
+  if [ "${status}" != "200" ]; then
+    echo ""
+    error_return "Unsupported FFmpeg version: ${version}
+
+Build this buildpack as a Docker image. Then, try to run it to build
+and upload FFmpeg binaries for Heroku during slub compile stage."
+    return 1
+  fi
+}
+
+create_export_script() {
+  local profileDir="${1}/.profile.d"
+
+  mkdir -p "${profileDir}"
+  cat << EOF > ${profileDir}/ffmpeg-path.sh
+export PATH="\${HOME}/.ffmpeg/bin:\${PATH}"
+EOF
+}

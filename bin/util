@@ -1,34 +1,3 @@
-
-is_version_change() {
-  local dir="${1}"
-  local version="${2}"
-  local name="${3}"
-
-  if [ ! -d "${dir}" ]; then
-    echo "Invalid ${name} directory."
-    return 1
-  fi
-
-  [ -f "${dir}/version" ] && [ "$(cat "${dir}/version")" != "${version}" ]
-}
-
-validate_version() {
-  local url="${1}"
-  local version="${2}"
-  local name="${3}"
-
-  local status=$(curl --retry 3 --silent --head -w %{http_code} -L ${url} \
-    -o /dev/null)
-  if [ "${status}" != "200" ]; then
-    echo ""
-    error_return "Unsupported ${name} version: ${version}
-
-Run this buildpack as an application on the same Heroku stack and
-with the same config vars to create environment to build ${name}
-binaries. When deployed, run bundle exec make in one-off dyno."
-    return 1
-  fi
-}
 #!/usr/bin/bash
 
 error_return() {
@@ -36,10 +5,6 @@ error_return() {
   echo " !     ERROR: $*" | indent no_first_line_indent
   echo
   return 1
-}
-
-status() {
-  echo "-----> $*"
 }
 
 status_pending() {
@@ -64,4 +29,19 @@ indent() {
     Darwin) sed -l "$c";; # mac/bsd
     *)      sed -u "$c";; # unix/gnu
   esac
+}
+
+export_env_dir() {
+  env_dir="${1}"
+  whitelist_regex="${2:-''}"
+  blacklist_regex="${3:-'^(PATH|GIT_DIR|CPATH|CPPATH|LD_PRELOAD|LIBRARY_PATH|JAVA_OPTS|JAVA_TOOL_OPTIONS)$'}"
+  if [ -d "${env_dir}" ]; then
+    for e in $(ls "${env_dir}"); do
+      echo "${e}" | \
+        grep -E "${whitelist_regex}" | \
+        grep -qvE "${blacklist_regex}" && \
+        export "${e}=$(cat $env_dir/$e)"
+      :
+    done
+  fi
 }
