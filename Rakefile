@@ -20,7 +20,7 @@ desc "Upload custom-build binaries to be accessible by FFmpeg Heroku buildpack."
 task dist: [DIST_TARBALL] do |t|
   Aws::S3::Client.new.
       put_object bucket: ENV['FFMPEG_S3_BUCKET'],
-                 key: "#{ENV['STACK']}/ffmpeg/#{ENV['FFMPEG_VERSION']}.tar.xz",
+                 key: "ffmpeg/#{ENV['STACK']}/#{ENV['FFMPEG_VERSION']}.tar.xz",
                  body: File.open(t.prerequisites.first)
 end
 
