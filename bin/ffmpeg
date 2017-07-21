@@ -18,7 +18,7 @@ install_ffmpeg() {
   mkdir -p "${baseDir}"
 
   if [ ! -f "${tarball}" ] && [ ! -f "${exe}" ] || \
-      is_version_change "${baseDir}" "${version}" "FFmpeg"; then
+      is_version_change "${baseDir}" "${version}"; then
     rm -rf "${baseDir}"
     mkdir -p "${baseDir}"
     validate_url "${url}" "${version}"
