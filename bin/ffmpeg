@@ -14,7 +14,7 @@ install_ffmpeg() {
 
   local baseDir="${buildDir}/.ffmpeg"
   local tarball="${baseDir}/ffmpeg.tar.xz"
-  local exe="${basedir}/bin/ffmpeg"
+  local exe="${baseDir}/bin/ffmpeg"
 
   if [ ! -f "${tarball}" ] && [ ! -f "${exe}" ] || \
       is_version_change "${baseDir}" "${version}"; then
