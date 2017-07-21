@@ -15,12 +15,11 @@ install_ffmpeg() {
   local baseDir="${buildDir}/.ffmpeg"
   local tarball="${baseDir}/ffmpeg.tar.xz"
   local exe="${basedir}/bin/ffmpeg"
-  mkdir -p "${baseDir}"
+  mkdir -p "$(dirname "${baseDir}")"
 
   if [ ! -f "${tarball}" ] && [ ! -f "${exe}" ] || \
       is_version_change "${baseDir}" "${version}"; then
     rm -rf "${baseDir}"
-    mkdir -p "${baseDir}"
     validate_url "${url}" "${version}"
     curl --retry 3 --silent --show-error --location "${url}" \
       --output "${tarball}"
