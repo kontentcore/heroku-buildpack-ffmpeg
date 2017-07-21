@@ -2,8 +2,8 @@
 
 install_ffmpeg() {
   local buildDir="${1}"
-  local version="#{2}"
-  local url="#{3}"
+  local version="${2}"
+  local url="${3}"
 
   status_pending "Installing FFmpeg ${version}"
 
