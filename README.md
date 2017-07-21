@@ -1,6 +1,6 @@
 # Heroku Buildpack with FFmpeg
 
-Practically all FFmpeg buildpacks we have found simply contain static binaries in their repository and nothing else. This is an issue regarding maintainability and security. That is why this buildpack exists. It provides a way from official FFmpeg source code to binaries accessible via `PATH` environment variable in Heroku slug running your application.
+Practically all FFmpeg buildpacks we have found simply contain static binaries in their repository and not much else. This is an issue regarding maintainability and security. This is why this buildpack exists. It provides a way from official FFmpeg source code to binaries accessible via `PATH` environment variable in Heroku slug running your application.
 
 You might ask why not to use some Heroku Add-on or other third-party service like typical Heroku user? We think they are expensive, slow or limited for what we need.
 
