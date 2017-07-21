@@ -1,4 +1,3 @@
-#!/bin/bash
 
 is_version_change() {
   local dir="${1}"
@@ -30,6 +29,7 @@ binaries. When deployed, run bundle exec make in one-off dyno."
     return 1
   fi
 }
+#!/usr/bin/bash
 
 error_return() {
   echo

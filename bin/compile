@@ -1,8 +1,8 @@
-#!/bin/bash
 set -e
 
 BIN_DIR=$(cd $(dirname "${0}"); pwd)
 BUILD_DIR="${1}"
+#!/usr/bin/bash
 
 FFMPEG_S3_BUCKET="${FFMPEG_S3_BUCKET:-"kc-heroku-buildpack-binaries"}"
 
