@@ -8,7 +8,7 @@ ENV['STACK'] ||= case `lsb_release -irs`.chomp.split
                    else abort 'Cannot recognize Heroku Stack'
                  end
 ENV['AWS_REGION'] ||= 'us-east-1'
-ENV['AWS_S3_BUCKET'] ||= 'kc-heroku-buildpack-binaries'
+ENV['FFMPEG_S3_BUCKET'] ||= 'kc-heroku-buildpack-binaries'
 ENV['FFMPEG_VERSION'] ||= '3.3.2'
 ENV['FFMPEG_DIR'] ||= '.ffmpeg'
 
@@ -19,7 +19,7 @@ task default: [:dist]
 desc "Upload custom-build binaries to be accessible by FFmpeg Heroku buildpack."
 task dist: [DIST_TARBALL] do |t|
   Aws::S3::Client.new.
-      put_object bucket: ENV['AWS_S3_BUCKET'],
+      put_object bucket: ENV['FFMPEG_S3_BUCKET'],
                  key: "#{ENV['STACK']}/ffmpeg/#{ENV['FFMPEG_VERSION']}.tar.xz",
                  body: File.open(t.prerequisites.first)
 end

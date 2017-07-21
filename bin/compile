@@ -4,10 +4,10 @@ set -e
 BIN_DIR=$(cd $(dirname "${0}"); pwd)
 BUILD_DIR="${1}"
 
-AWS_S3_BUCKET="${AWS_S3_BUCKET:-"kc-heroku-buildpack-binaries"}"
+FFMPEG_S3_BUCKET="${FFMPEG_S3_BUCKET:-"kc-heroku-buildpack-binaries"}"
 
 FFMPEG_VERSION="${FFMPEG_VERSION:-3.3.2}"
-FFMPEG_URL="https://${AWS_S3_BUCKET}.s3.amazonaws.com/${STACK:-"cedar-14"}/ffmpeg/${FFMPEG_VERSION}.tar.xz"
+FFMPEG_URL="https://${FFMPEG_S3_BUCKET}.s3.amazonaws.com/${STACK:-"cedar-14"}/ffmpeg/${FFMPEG_VERSION}.tar.xz"
 
 FFMPEG_DIR="${BUILD_DIR}/.ffmpeg"
 FFMPEG_TARBALL="${FFMPEG_DIR}/ffmpeg.tar.xz"
