@@ -23,7 +23,8 @@ module FFmpeg
   end
   CLEAN << PREFIX
 
-  file "#{BUILD_DIR}/Makefile" => ["#{SRC_DIR}/configure", BUILD_DIR, '.yasm'] do |t|
+  file "#{BUILD_DIR}/Makefile" => ["#{SRC_DIR}/configure", BUILD_DIR,
+                                   '.yasm'] do |t|
     configure = File.absolute_path t.prerequisites.first
     prefix = File.absolute_path PREFIX
     yasm = File.absolute_path '.yasm/bin/yasm'
