@@ -20,10 +20,13 @@ task default: [:dist]
 
 desc "Upload custom-build binaries to be accessible by FFmpeg Heroku buildpack."
 task dist: [FFMPEG_TARBALL] do |t|
+  key = "ffmpeg/#{ENV['STACK']}/#{ENV['FFMPEG_VERSION']}.tar.xz"
+  rake_output_message "Upload FFmpeg binaries to s3://#{ENV['FFMPEG_S3_BUCKET']}/#{key}"
   Aws::S3::Client.new.
       put_object bucket: ENV['FFMPEG_S3_BUCKET'],
-                 key: "ffmpeg/#{ENV['STACK']}/#{ENV['FFMPEG_VERSION']}.tar.xz",
-                 body: File.open(t.prerequisites.first)
+                 key: key,
+                 body: File.open(t.prerequisites.first),
+                 acl: 'public-read'
 end
 
 file FFMPEG_TARBALL => [ENV['FFMPEG_DIR'], FFMPEG_BUILD_DIR] do |t|
