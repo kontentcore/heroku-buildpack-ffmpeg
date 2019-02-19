@@ -5,6 +5,7 @@ require 'aws-sdk'
 ENV['STACK'] ||= case `lsb_release -irs`.chomp.split
                    when ['Ubuntu', '14.04'] then 'cedar-14'
                    when ['Ubuntu', '16.04'] then 'heroku-16'
+                   when ['Ubuntu', '18.04'] then 'heroku-18'
                    else abort 'Cannot recognize Heroku Stack'
                  end
 ENV['AWS_REGION'] ||= 'us-east-1'

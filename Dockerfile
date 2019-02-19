@@ -1,10 +1,10 @@
-FROM heroku/heroku:16-build
+FROM heroku/heroku:18-build
 
 ENV BUILD_DIR="${BUILD_DIR:-/app}"
 WORKDIR ${BUILD_DIR}
 
 COPY FFmpeg.asc FFmpeg.asc
-RUN ["gpg", "--no-use-agent", "--import", "FFmpeg.asc"]
+RUN ["gpg", "--import", "FFmpeg.asc"]
 RUN ["rm", "FFmpeg.asc"]
 
 RUN ["gem", "install", "bundler", "-N"]

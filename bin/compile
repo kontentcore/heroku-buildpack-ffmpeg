@@ -13,9 +13,9 @@ BIN_DIR="$(cd $(dirname $0); pwd)" # absolute path
 
 export_env_dir "${ENV_DIR}" '^(FFMPEG_VERSION|FFMPEG_S3_BUCKET)$'
 
-FFMPEG_VERSION="${FFMPEG_VERSION:-3.3.2}"
+FFMPEG_VERSION="${FFMPEG_VERSION:-4.4.1}"
 FFMPEG_S3_BUCKET="${FFMPEG_S3_BUCKET:-kc-heroku-buildpack-binaries}"
-FFMPEG_URL="https://s3.amazonaws.com/${FFMPEG_S3_BUCKET}/ffmpeg/${STACK:-cedar-14}/${FFMPEG_VERSION}.tar.xz"
+FFMPEG_URL="https://s3.amazonaws.com/${FFMPEG_S3_BUCKET}/ffmpeg/${STACK:-heroku-18}/${FFMPEG_VERSION}.tar.xz"
 
 # Install FFmpeg
 install_ffmpeg "${BUILD_DIR}" "${FFMPEG_VERSION}" "${FFMPEG_URL}"
