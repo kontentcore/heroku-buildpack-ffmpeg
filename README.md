@@ -18,19 +18,18 @@ See for yourself:
 
     git push heroku master
     # …
-    heroku run bash
-    # Running bash on ⬢ kc-ffmpeg... up, run.2418 (Hobby)
-    ffmpeg -version
-    # ffmpeg version 3.3.2 Copyright (c) 2000-2017 the FFmpeg developers
-    # built with gcc 5.4.0 (Ubuntu 5.4.0-6ubuntu1~16.04.4) 20160609
+    heroku run ffmpeg -version
+    # Running ffmpeg -version on ⬢ kc-ffmpeg... up, run.2925 (Hobby)
+    # ffmpeg version 4.1.1 Copyright (c) 2000-2019 the FFmpeg developers
+    # built with gcc 7 (Ubuntu 7.3.0-27ubuntu1~18.04)
     # configuration: --prefix=/app/.ffmpeg --yasmexe=/app/.yasm/bin/yasm
-    # libavutil      55. 58.100 / 55. 58.100
-    # libavcodec     57. 89.100 / 57. 89.100
-    # libavformat    57. 71.100 / 57. 71.100
-    # libavdevice    57.  6.100 / 57.  6.100
-    # libavfilter     6. 82.100 /  6. 82.100
-    # libswscale      4.  6.100 /  4.  6.100
-    # libswresample   2.  7.100 /  2.  7.100
+    # libavutil      56. 22.100 / 56. 22.100
+    # libavcodec     58. 35.100 / 58. 35.100
+    # libavformat    58. 20.100 / 58. 20.100
+    # libavdevice    58.  5.100 / 58.  5.100
+    # libavfilter     7. 40.101 /  7. 40.101
+    # libswscale      5.  3.100 /  5.  3.100
+    # libswresample   3.  3.100 /  3.  3.100
 
 As you can `ffmpeg` and other FFmpeg binaries are accessible via `PATH` environment variable.
 
@@ -40,7 +39,7 @@ We utilize only `bin/compile` script expected by [Heroku Buildpack API](https://
 
 [Heroku stack](https://devcenter.heroku.com/articles/stack) your app is running on is something you have to configure yourself.
 
-Desired FFmpeg version cat be set by `FFMPEG_VERSION` config var. It defaults to whatever we have seen as the last stable version which is *3.3.2* as of this writing.
+Desired FFmpeg version cat be set by `FFMPEG_VERSION` config var. It defaults to whatever we have seen as the last stable version which is *4.1.1* as of this writing.
 
 The AWS S3 bucket can be overridden by setting `FFMPEG_S3_BUCKET` config var. It defaults to `kc-heroku-buildpack-binaries`. We expect to find binary archives with these keys: `ffmpeg/$STACK/$FFMPEG_VERSION.tar.xz`.
 
