@@ -23,13 +23,11 @@ module FFmpeg
   end
   CLEAN << PREFIX
 
-  file "#{BUILD_DIR}/Makefile" => ["#{SRC_DIR}/configure", BUILD_DIR,
-                                   '.yasm'] do |t|
+  file "#{BUILD_DIR}/Makefile" => ["#{SRC_DIR}/configure", BUILD_DIR] do |t|
     configure = File.absolute_path t.prerequisites.first
     prefix = File.absolute_path PREFIX
-    yasm = File.absolute_path '.yasm/bin/yasm'
     Dir.chdir File.dirname t.name do
-      sh configure, "--prefix=#{prefix}", "--yasmexe=#{yasm}"
+      sh configure, "--prefix=#{prefix}", "--enable-nonfree", "--enable-gnutls"
     end
   end
 

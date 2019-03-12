@@ -7,6 +7,8 @@ COPY FFmpeg.asc FFmpeg.asc
 RUN ["gpg", "--import", "FFmpeg.asc"]
 RUN ["rm", "FFmpeg.asc"]
 
+RUN apt-get update && apt-get install -y yasm
+
 RUN ["gem", "install", "bundler", "-N"]
 COPY Gemfile Gemfile
 COPY Gemfile.lock Gemfile.lock

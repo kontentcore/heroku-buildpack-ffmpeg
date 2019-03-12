@@ -13,7 +13,7 @@ Add buildpack to your existing app:
 If you want to see changes immediately, create an empty commit:
 
     git commit --allow-empty -m 'Add FFmpeg buildpack'
-    
+
 See for yourself:
 
     git push heroku master
@@ -45,7 +45,7 @@ The AWS S3 bucket can be overridden by setting `FFMPEG_S3_BUCKET` config var. It
 
 ## Building Binary Archives
 
-We use Docker with Heroku-16 build image. It is simple and straightforward.
+We use Docker with Heroku-18 build image. It is simple and straightforward.
 
 The code itself should build FFmpeg on Cedar-14 but it requires more complicated setup. We have no need for it, so we do not support it.
 
