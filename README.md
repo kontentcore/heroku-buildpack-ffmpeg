@@ -22,7 +22,7 @@ See for yourself:
     # Running ffmpeg -version on ⬢ kc-ffmpeg... up, run.2925 (Hobby)
     # ffmpeg version 4.1.1 Copyright (c) 2000-2019 the FFmpeg developers
     # built with gcc 7 (Ubuntu 7.3.0-27ubuntu1~18.04)
-    # configuration: --prefix=/app/.ffmpeg --yasmexe=/app/.yasm/bin/yasm
+    # configuration: --prefix=/app/.ffmpeg --enable-nonfree --enable-gnutls
     # libavutil      56. 22.100 / 56. 22.100
     # libavcodec     58. 35.100 / 58. 35.100
     # libavformat    58. 20.100 / 58. 20.100
