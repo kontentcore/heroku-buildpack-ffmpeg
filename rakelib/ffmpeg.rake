@@ -27,7 +27,7 @@ module FFmpeg
     configure = File.absolute_path t.prerequisites.first
     prefix = File.absolute_path PREFIX
     Dir.chdir File.dirname t.name do
-      sh configure, "--prefix=#{prefix}", "--enable-nonfree", "--enable-gnutls"
+      sh configure, "--prefix=#{prefix}", "--enable-nonfree", "--enable-gnutls", "--enable-libmp3lame"
     end
   end
 
