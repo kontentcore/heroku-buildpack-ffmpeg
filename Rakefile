@@ -10,7 +10,7 @@ ENV['STACK'] ||= case `lsb_release -irs`.chomp.split
                  end
 ENV['AWS_REGION'] ||= 'us-east-1'
 ENV['FFMPEG_S3_BUCKET'] ||= 'kc-heroku-buildpack-binaries'
-ENV['FFMPEG_VERSION'] ||= '3.3.2'
+ENV['FFMPEG_VERSION'] ||= '4.1.3'
 
 abort 'Config var FFMPEG_DIR must be set.' unless ENV['FFMPEG_DIR']
 
